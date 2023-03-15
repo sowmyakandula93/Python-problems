@@ -1,2 +1,2 @@
 # Python-problems
-Adding Python examples solves as part of the python essentials course from python institute
+Adding Python examples solves as part of the python courses from python institute
