@@ -1,0 +1,126 @@
+"""
+This program plays tic tac toe with User
+Computer uses "X" and User plays with "0"
+Computer always plays first move.
+User is prompted to select one of the empty boxes marked with number
+After every move program evaluates the results
+"""
+from random import randrange
+import sys
+
+def display_board(board):
+    """
+    This function is used to display the board on screen after every move
+    """
+    # The function accepts one parameter containing the board's current status
+    # and prints it out to the console.
+    line1 = "+-------+-------+-------+"
+    line2 = "|       |       |       |"
+    for row in range(3):
+        print(line1)
+        print(line2)
+        space = " "
+        dash = "|"
+        for column in range(3):
+            print(dash, space, board[row][column], space, end=" ")
+        print(dash)
+        print(line2)
+    print(line1)
+
+def enter_move(board):
+    """
+    This function prompts user to enter input
+    Check if this input is valid
+        1) Checking if user provided already filled box number?
+        2) Checking if the user provide integer number which is >=1 and <=9
+        3) Sets User sected box to "0" in the board
+    """
+    # checks the input, and updates the board according to the user's decision.
+    global INVALID_NUMS
+    user_num = int(input("Enter your move: "))
+    while (user_num in INVALID_NUMS or user_num > 9 or user_num < 1 or \
+    type(user_num) != int):
+        user_num = int(input("Enter your move: "))
+    for row in range(3):
+        for column in range(3):
+            if user_num == board[row][column]:
+                INVALID_NUMS.append(user_num)
+                board[row][column] = "0"
+
+def victory_for(board, sign):
+    """
+    This function checks the status of board after every move
+    Checks if computer or User won
+    Checks all rows, columns and diagonals for same sign
+    return True if game over if not returns False for game to continue
+    """
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] == sign:
+            return True
+        elif board[0][i] == board[1][i] == board[2][i] == sign:
+            return True
+    if board[0][0] == board[1][1] == board[2][2] == sign:
+        return True
+    elif board[0][2] == board[1][1] == board[2][0] == sign:
+        return True
+    return False
+
+def draw_move(board):
+    """
+    This fuction is used for computer moves.
+    The first move is always from computer
+    Uses "X" for computer move and places it on middle square
+    For next moves uses randrange function to pick a square
+    Keeps picking until it chooses a square that is not previously filled
+    """
+    global INVALID_NUMS
+    global FIRST_MOVE
+    num = 0
+    if FIRST_MOVE:
+        print("Computer picked 5")
+        board[1][1] = "X"
+        INVALID_NUMS = [5]
+        FIRST_MOVE = False
+    else:
+        num = randrange(1, 10)
+        while num in INVALID_NUMS:
+            num = randrange(1, 10)
+        for row in range(3):
+            for column in range(3):
+                if num == board[row][column]:
+                    INVALID_NUMS.append(num)
+                    print("Computer picked ",num)
+                    board[row][column] = "X"
+                    return
+
+#def create_empty_board:
+ttt_board = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+display_board(ttt_board) #display empty board
+game_over = False
+INVALID_NUMS = []
+#first_move
+FIRST_MOVE = True
+draw_move(ttt_board)
+display_board(ttt_board)
+while not game_over:
+    if(len(INVALID_NUMS) == 9):
+        game_over = True
+        print("Both lost the game...")
+        break
+    try:
+        enter_move(ttt_board)
+    except ValueError:
+        print("Please enter valid number between 1 an 9")
+        sys.exit(1)
+    display_board(ttt_board)
+    game_over = victory_for(ttt_board, "0")
+    if game_over:
+        print("You Won.. Hurray...")
+        break
+    draw_move(ttt_board)
+    display_board(ttt_board)
+    game_over = victory_for(ttt_board, "X")
+    if game_over:
+        print("Computer Won.. Sorry..")
+        break
+print("Exiting the game")
