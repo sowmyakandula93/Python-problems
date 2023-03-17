@@ -1,0 +1,70 @@
+board = \
+[["5","3",".",".","7",".",".",".","."]
+,["6",".",".","1","9","5",".",".","."]
+,[".","9","8",".",".",".",".","6","."]
+,["8",".",".",".","6",".",".",".","3"]
+,["4",".",".","8",".","3",".",".","1"]
+,["7",".",".",".","2",".",".",".","6"]
+,[".","6",".",".",".",".","2","8","."]
+,[".",".",".","4","1","9",".",".","5"]
+,[".",".",".",".","8",".",".","7","9"]]
+out = "yes"
+valid = 10
+for i in range(9):
+    if not all(ele == "." or (int(ele) >= 1 and int(ele) <=9) for ele in board[i]):
+        valid = i
+        break
+if valid != 10:
+    print("Provide valid input numbers between 1-9 in row ",valid +1)
+else:
+    for i in range(9):
+        dict_row = {}
+        dict_col = {}
+        for j in range(9):
+            if board[i][j] != ".":
+               if board[i][j] not in dict_row:
+                   dict_row[board[i][j]] = 1
+               else:
+                   dict_row[board[i][j]] += 1
+            if board[j][i] != ".":
+                if board[j][i] not in dict_col:
+                   dict_col[board[j][i]] = 1
+                else:
+                   dict_col[board[j][i]] += 1
+        if any(value > 1 for value in dict_row.values()) or any(value > 1 for value in dict_col.values()):
+            out = "no"
+            break
+    count = 0
+    dict_sub = {}
+    for i in range(0,9,3):
+        if out == "no":
+            break
+        for j in range(9):
+            count += 1
+            if board[i][j] != ".":
+                if board[i][j] not in dict_sub:
+                    dict_sub[board[i][j]] = 1
+                else:
+                    dict_sub[board[i][j]] += 1
+            if board[i+1][j] != ".":
+                if board[i+1][j] not in dict_sub:
+                    dict_sub[board[i+1][j]] = 1
+                else:
+                    dict_sub[board[i+1][j]] += 1
+            if board[i+2][j] != ".":
+                if board[i+2][j] not in dict_sub:
+                    dict_sub[board[i+2][j]] = 1
+                else:
+                    dict_sub[board[i+2][j]] += 1                    
+            if count == 3:
+                if any(value > 1 for value in dict_sub.values()):
+                    out ="no"
+                    break
+                dict_sub = {}
+                count = 0
+if out == "yes":
+    print("yes")
+else:
+    print(out)
+
+        
